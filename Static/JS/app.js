@@ -1,19 +1,21 @@
  /* 
-                   1 = Full Tree
-                   2 = Trunk
-                   3 = Tree
-                   4 = Grass
-                   5 = Full House
-                   6 = Door
-                   7 = Floor
-                   8 = Roof
-                   9 = House
-               */
+                                       1 = Full Tree
+                                       2 = Trunk
+                                       3 = Tree
+                                       4 = Grass
+                                       5 = Full House
+                                       6 = Door
+                                       7 = Floor
+                                       8 = Roof
+                                       9 = House
+                                   */
  window.addEventListener('DOMContentLoaded', function() {
      var canvas = document.getElementById('canvas');
      var elements = [];
      var engine = new BABYLON.Engine(canvas, true);
+
      engine.enableOfflineSupport = false; // Dont require a manifest file
+
      var createScene = function() {
          var scene = new BABYLON.Scene(engine);
          scene.clearColor = new BABYLON.Color3.White();
@@ -49,7 +51,9 @@
          scene.registerBeforeRender(function() {});
          return scene;
      }
+
      var scene = createScene();
+
      var onKeyDown = function(evt) {
          //House Left
          if (evt.keyCode == 65) {
@@ -141,7 +145,7 @@
          }
 
          //Tree Left
-         if (evt.keyCode == 75) {
+         if (evt.keyCode == 74) {
              var cont = 1;
              elements.forEach(function(e) {
                  var matrix = BABYLON.Matrix.Translation(0, 0, 0);
@@ -156,7 +160,7 @@
          }
 
          //Tree Right
-         if (evt.keyCode == 192) {
+         if (evt.keyCode == 76) {
              var cont = 1;
              elements.forEach(function(e) {
                  var matrix = BABYLON.Matrix.Translation(0, 0, 0);
@@ -170,7 +174,7 @@
          }
 
          //Tree Down
-         if (evt.keyCode == 76) {
+         if (evt.keyCode == 75) {
              var cont = 1;
              elements.forEach(function(e) {
 
@@ -186,7 +190,7 @@
          }
 
          //Tree Up
-         if (evt.keyCode == 79) {
+         if (evt.keyCode == 73) {
              var cont = 1;
              elements.forEach(function(e) {
                  var matrix = BABYLON.Matrix.Translation(0, 0, 0);
@@ -200,7 +204,7 @@
          }
 
          //Tree Front
-         if (evt.keyCode == 73) {
+         if (evt.keyCode == 85) {
              var cont = 1;
              elements.forEach(function(e) {
 
@@ -216,7 +220,7 @@
          }
 
          //Tree Back
-         if (evt.keyCode == 80) {
+         if (evt.keyCode == 79) {
              var cont = 1;
              elements.forEach(function(e) {
                  var matrix = BABYLON.Matrix.Translation(0, 0, 0);
@@ -227,8 +231,94 @@
                  }
                  cont++;
              });
+
+             mesh.rotate(BABYLON.Axis.X, 1.0, BABYLON.Space.LOCAL);
+         }
+
+         //House Rotate
+         if (evt.keyCode == 84) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.X, 1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
+         }
+
+         if (evt.keyCode == 71) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.X, -1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
+         }
+
+         //House Rotate
+         if (evt.keyCode == 82) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.Y, 1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
+         }
+
+         //House Rotate
+         if (evt.keyCode == 89) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.Y, -1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
+         }
+
+         //House Rotate
+         if (evt.keyCode == 72) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.Z, 1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
+         }
+
+         if (evt.keyCode == 70) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 5) {
+                     e.rotate(BABYLON.Axis.Z, -1.0, BABYLON.Space.LOCAL);
+                 }
+                 cont++;
+             });
          }
      };
+
+
      // On key up, reset the movement
      var onKeyUp = function(evt) {};
      // Register events with the right Babylon function
