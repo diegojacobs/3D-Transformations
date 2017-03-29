@@ -1,14 +1,14 @@
  /* 
-                                                       1 = Full Tree
-                                                       2 = Trunk
-                                                       3 = Tree
-                                                       4 = Grass
-                                                       5 = Full House
-                                                       6 = Door
-                                                       7 = Floor
-                                                       8 = Roof
-                                                       9 = House
-                                                   */
+     1 = Full Tree
+     2 = Trunk
+     3 = Tree
+     4 = Grass
+     5 = Full House
+     6 = Door
+     7 = Floor
+     8 = Roof
+     9 = House
+ */
  window.addEventListener('DOMContentLoaded', function() {
      var canvas = document.getElementById('canvas');
      var elements = [];
@@ -47,7 +47,6 @@
                  );
              }
          );
-         console.log(elements);
          scene.registerBeforeRender(function() {});
          return scene;
      }
@@ -55,6 +54,13 @@
      var scene = createScene();
 
      var onKeyDown = function(evt) {
+         //Wireframe
+         if (evt.keyCode == 20) {
+             elements.forEach(function(e) {
+                 e.wireframe = true;
+             });
+         }
+
          //House Left
          if (evt.keyCode == 65) {
              var cont = 1;
@@ -402,11 +408,11 @@
                  cont++;
              });
          }
+
          //House Scale
          if (evt.keyCode == 49) {
              var cont = 1;
              elements.forEach(function(e) {
-                 console.log(e);
                  var matrix = BABYLON.Matrix.Translation(0, 0, 0);
                  e.setPivotMatrix(matrix);
 
@@ -481,6 +487,90 @@
                  e.setPivotMatrix(matrix);
 
                  if (cont === 5) {
+                     e.scaling.z = e.scaling.z * 0.9;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 55) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
+                     e.scaling.x = e.scaling.x * 1.1;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 56) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
+                     e.scaling.x = e.scaling.x * 0.9;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 57) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
+                     e.scaling.y = e.scaling.y * 1.1;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 48) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
+                     e.scaling.y = e.scaling.y * 0.9;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 219) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
+                     e.scaling.z = e.scaling.z * 1.1;
+                 }
+                 cont++;
+             });
+         }
+
+         //Tree Scale
+         if (evt.keyCode == 221) {
+             var cont = 1;
+             elements.forEach(function(e) {
+                 var matrix = BABYLON.Matrix.Translation(0, 0, 0);
+                 e.setPivotMatrix(matrix);
+
+                 if (cont === 1) {
                      e.scaling.z = e.scaling.z * 0.9;
                  }
                  cont++;
