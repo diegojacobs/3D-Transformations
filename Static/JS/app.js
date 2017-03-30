@@ -1,27 +1,31 @@
  /* 
-                                                                                                                                              1 = Full Tree
-                                                                                                                                              2 = Trunk
-                                                                                                                                              3 = Tree
-                                                                                                                                              4 = Grass
-                                                                                                                                              5 = Full House
-                                                                                                                                              6 = Door
-                                                                                                                                              7 = Floor
-                                                                                                                                              8 = Roof
-                                                                                                                                              9 = House
-                                                                                                                                          */
+                                                 1 = Full Tree
+                                                 2 = Trunk
+                                                 3 = Tree
+                                                 4 = Grass
+                                                 5 = Full House
+                                                 6 = Door
+                                                 7 = Floor
+                                                 8 = Roof
+                                                 9 = House
+                                                 */
  window.addEventListener('DOMContentLoaded', function() {
      var canvas = document.getElementById('canvas');
      var elements = [];
      var actions = ['trans', 'rotate', 'scale', 'shear'];
      var dimensions = ['x', 'y', 'z'];
      // 3: House, 0: Tree, 5: Door
-     var objects3D = [3, 0, 6];
+     var objects3D = [1, 9, 5];
      var actualAction = actions[0];
      var actualObject = objects3D[0];
      var engine = new BABYLON.Engine(canvas, true);
      var openDoorAudio = {};
      var closeDoorAudio = {};
      var doorIsOpen = false;
+     var help = false;
+     var shearX = 0;
+     var shearY = 0;
+     var shearZ = 0;
 
      engine.enableOfflineSupport = false; // Dont require a manifest file
 
@@ -60,6 +64,8 @@
                  );
              }
          );
+         scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+         scene.fogDensity = 0.01;
          scene.registerBeforeRender(function() {});
 
          return scene;
@@ -95,9 +101,14 @@
                  rotateElements(elements[actualObject], BABYLON.Axis.Z, 1.0);
              }
 
-             // Scale: Grow in X
-             if (actualAction === actions[2]) {
-                 scaleElements(elements[actualObject], dimensions[0], 0.9);
+             // Rotation
+             if (actualAction === actions[1]) {
+                 rotateElements(elements[actualObject], BABYLON.Axis.Z, -1.0);
+             }
+
+             // Shear: X
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[8] -= 1;
              }
          }
 
@@ -108,14 +119,19 @@
                  translateElements(elements[actualObject], transVector, transVector);
              }
 
-             // Rotation
-             if (actualAction === actions[1]) {
-                 rotateElements(elements[actualObject], BABYLON.Axis.Z, -1.0);
+             // Scale: Grow in X
+             if (actualAction === actions[2]) {
+                 scaleElements(elements[actualObject], dimensions[0], 0.9);
              }
 
              // Scale: Decrement in X
              if (actualAction === actions[2]) {
                  scaleElements(elements[actualObject], dimensions[0], 1.1);
+             }
+
+             // Shear: X
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[8] += 1;
              }
          }
 
@@ -135,6 +151,11 @@
              if (actualAction === actions[2]) {
                  scaleElements(elements[actualObject], dimensions[1], 1.1);
              }
+
+             // Shear: Y
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[9] -= 1;
+             }
          }
 
          // Key: S - Down  
@@ -152,6 +173,11 @@
              // Scale: Grow in z
              if (actualAction === actions[2]) {
                  scaleElements(elements[actualObject], dimensions[1], 0.9);
+             }
+
+             // Shear: Y
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[9] += 1;
              }
          }
 
@@ -171,6 +197,11 @@
              if (actualAction === actions[2]) {
                  scaleElements(elements[actualObject], dimensions[2], 1.1);
              }
+
+             // Shear: Z
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[2] -= 1;
+             }
          }
 
          // Key: Q - Back
@@ -189,21 +220,31 @@
              if (actualAction === actions[2]) {
                  scaleElements(elements[actualObject], dimensions[2], 0.9);
              }
+
+             // Shear: Z
+             if (actualAction === actions[3]) {
+                 elements[actualObject]._worldMatrix.m[2] += 1;
+             }
          }
 
-         // Key: I - Translate
-         if (evt.keyCode == 73) {
+         // Key: H - Translate
+         if (evt.keyCode == 72) {
              actualAction = actions[0];
          }
 
-         // Key: O - Rotate
-         if (evt.keyCode == 79) {
+         // Key: J - Rotate
+         if (evt.keyCode == 74) {
              actualAction = actions[1];
          }
 
-         // Key: P - Scale
-         if (evt.keyCode == 80) {
+         // Key: K - Scale
+         if (evt.keyCode == 75) {
              actualAction = actions[2];
+         }
+
+         // Key: L - Scale
+         if (evt.keyCode == 76) {
+             actualAction = actions[3];
          }
 
          // Key: X - OpenDoor
@@ -234,6 +275,22 @@
          if (evt.keyCode == 55) {
              points(elements);
          }
+
+         if (evt.keyCode == 57) {
+             var helpBlock = document.getElementById('helpBlock');
+             var canvas = document.getElementById('canvasBlock');
+
+             if (help) {
+                 helpBlock.style.display = 'none';
+                 canvas.style.display = 'block';
+             } else {
+                 helpBlock.style.display = 'block';
+                 canvas.style.display = 'none';
+             }
+
+             help = !help;
+         }
+
      };
 
      var wireFrame = function(elements) {
@@ -263,16 +320,12 @@
      };
 
      var translateElements = function(element, houseVector, treeGroundVector) {
-         // Set pivot to element
-         var matrix = BABYLON.Matrix.Translation(0, 0, 0);
-         element.setPivotMatrix(matrix);
-         // Apply transformation with new vector3D
          element.translate(houseVector, 1.0, BABYLON.Space.LOCAL);
      };
 
      var rotateElements = function(element, vector, factor) {
          var middle = getMiddlePosition(element);
-         element.setPivotMatrix(BABYLON.Matrix.Translation(middle.x, middle.y, middle.z));
+         console.log(middle);
          element.rotate(vector, factor, BABYLON.Space.LOCAL);
      };
 
@@ -294,24 +347,21 @@
      };
 
      var openDoor = function(element) {
-         element.translate(new BABYLON.Vector3(1, 0, 0), 0.2, BABYLON.Space.LOCAL);
-         element.translate(new BABYLON.Vector3(0, 0, 1), -0.8, BABYLON.Space.LOCAL);
          element.rotate(BABYLON.Axis.Y, -Math.PI / 4, BABYLON.Space.LOCAL);
      };
 
      var closeDoor = function(element) {
          element.rotate(BABYLON.Axis.Y, Math.PI / 4, BABYLON.Space.LOCAL);
-         element.translate(new BABYLON.Vector3(0, 0, 1), 1.1, BABYLON.Space.LOCAL);
-         element.translate(new BABYLON.Vector3(1, 0, 0), 0.9, BABYLON.Space.LOCAL);
-         element.translate(new BABYLON.Vector3(0, 0, 1), -0.4, BABYLON.Space.LOCAL);
      };
 
      var getMiddlePosition = function(mesh) {
          var boundingInfo = mesh.getBoundingInfo().boundingBox;
-
-         return new BABYLON.Vector3(boundingInfo.maximumWorld.x - ((boundingInfo.maximumWorld.x - boundingInfo.minimumWorld.x) / 2),
-             boundingInfo.maximumWorld.y - ((boundingInfo.maximumWorld.y - boundingInfo.minimumWorld.y) / 2),
-             boundingInfo.maximumWorld.z - ((boundingInfo.maximumWorld.z - boundingInfo.minimumWorld.z) / 2));
+         console.log(boundingInfo);
+         console.log(mesh);
+         //(Ymax - Ymin)/2 + ymin
+         return new BABYLON.Vector3(boundingInfo.minimumWorld.x + ((boundingInfo.maximumWorld.x - boundingInfo.minimumWorld.x) / 2),
+             boundingInfo.minimumWorld.y + ((boundingInfo.maximumWorld.y - boundingInfo.minimumWorld.y) / 2),
+             boundingInfo.minimumWorld.z + ((boundingInfo.maximumWorld.z - boundingInfo.minimumWorld.z) / 2));
      }
 
      // On key up, reset the movement
