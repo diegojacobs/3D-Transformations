@@ -1,14 +1,14 @@
  /* 
-                                                 1 = Full Tree
-                                                 2 = Trunk
-                                                 3 = Tree
-                                                 4 = Grass
-                                                 5 = Full House
-                                                 6 = Door
-                                                 7 = Floor
-                                                 8 = Roof
-                                                 9 = House
-                                                 */
+                                                  1 = Full Tree
+                                                  2 = Trunk
+                                                  3 = Tree
+                                                  4 = Grass
+                                                  5 = Full House
+                                                  6 = Door
+                                                  7 = Floor
+                                                  8 = Roof
+                                                  9 = House
+                                                  */
  window.addEventListener('DOMContentLoaded', function() {
      var canvas = document.getElementById('canvas');
      var elements = [];
